@@ -1,0 +1,61 @@
+import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryGeneratedColumn } from "typeorm";
+import { OfferBoxSizeEnum } from "../enums/offer.box.size.enum";
+import { IOffer } from "../interfaces/offer";
+
+@Entity('offers')
+export class Offer extends BaseEntity implements IOffer{
+  // primary column for offer id
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // offer name
+  @Column({ type: 'varchar', length: 255 })
+  name: string;
+
+  // unique identifier for offer
+  @Column({ type: 'varchar', length: 255, unique: true })
+  slug: string;
+
+  // offer description 
+  @Column({ type: 'text' })
+  description: string;
+
+  // offer requirements
+  @Column({ type: 'text' })
+  requirements: string;
+
+  // offer thumbnail image url
+  @Column({ type: 'varchar', length: 255 })
+  thumbnail: string;
+
+  // size of offer thumbnail image - large, small
+  @Column({ type: 'enum', enum: OfferBoxSizeEnum, name: 'box_size' })
+  boxSize: OfferBoxSizeEnum;
+
+  // indicates if offer is available for desktop 
+  @Column({ type: 'boolean', default: false, name: 'is_desktop' })
+  isDesktop: boolean;
+
+  // indicates if offer is available for android
+  @Column({ type: 'boolean', default: false, name: 'is_android' })
+  isAndroid: boolean;
+
+  // indicates if offer is available for ios
+  @Column({ type: 'boolean', default: false, name: 'is_ios' })
+  isIos: boolean;
+
+  // offer url template
+  @Column({ type: 'varchar', length: 256, name: 'offer_url_template' })
+  offerUrlTemplate: string;
+
+  // provider name - this should be static for each offer type
+  // we're attaching two offer payloads - offer1, offer2
+  // so for offer1 payload, this should be "offer1"
+  // for offer2 payload, this should be "offer2"
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'provider_name' })
+  providerName: string;
+
+  // offer id from external provider 
+  @Column({ type: 'varchar', length: 255, name: 'external_offer_id', nullable: true })
+  externalOfferId: string;
+}
